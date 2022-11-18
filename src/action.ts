@@ -15,6 +15,9 @@ async function run(): Promise<void> {
 
         const repository = github.context.repo.repo;
 
+        // Test to see what environment we have here
+        core.setOutput('environment', process.env);
+
         const postData = getPostData(text, repository);
         core.setOutput('request', JSON.stringify(postData));
 
