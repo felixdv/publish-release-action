@@ -9706,9 +9706,35 @@ var github = __nccwpck_require__(5438);
 // EXTERNAL MODULE: ./node_modules/@actions/http-client/lib/index.js
 var lib = __nccwpck_require__(6255);
 ;// CONCATENATED MODULE: ./src/getPostData.ts
-function getPostData(text, repository) {
+function getPostData(context, input) {
+    const repository = `${context.repo.owner}/${context.repo.repo}`;
+    const repositoryLink = `<${context.serverUrl}/${repository}|${repository}>`;
+    const title = `Release for ${repositoryLink} [${input.stage}]: ${input.text}`;
     return {
-        text: `Release from github action: ${text}\nRepository: ${repository}`,
+        attachments: [
+            {
+                fallback: title,
+                pretext: title,
+                color: '#36a64f',
+                fields: [
+                    {
+                        title: 'Job',
+                        value: context.job,
+                        short: true,
+                    },
+                    {
+                        title: 'Github Ref',
+                        value: context.ref,
+                        short: true,
+                    },
+                    {
+                        title: 'SHA',
+                        value: context.sha,
+                        short: false,
+                    },
+                ],
+            },
+        ],
     };
 }
 
@@ -9718,16 +9744,20 @@ function getPostData(text, repository) {
 
 
 async function run() {
+    var _a, _b;
     try {
-        const slackWebhookUrl = core.getInput('url');
+        const slackWebhookUrl = core.getInput('slackWebhookUrl');
         console.log(`Webhook URL: ${slackWebhookUrl}`);
         // If input is not provided, text will be an empty string
         const text = core.getInput('text');
         console.log(`Text: ${text}`);
-        const repository = github.context.repo.repo;
+        const stage = (_b = (_a = core.getInput('stage')) !== null && _a !== void 0 ? _a : process.env.STAGE) !== null && _b !== void 0 ? _b : 'undefined';
         // Test to see what environment we have here
         core.setOutput('environment', process.env);
-        const postData = getPostData(text, repository);
+        const postData = getPostData(github.context, {
+            text,
+            stage,
+        });
         core.setOutput('request', JSON.stringify(postData));
         const httpClient = new lib.HttpClient('slack webhook client');
         const requestHeaders = {

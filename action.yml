@@ -2,9 +2,13 @@ name: 'Publish Release'
 description: 'Publish information about the release to a Slack channel'
 
 inputs:
-  url:
+  slackWebhookUrl:
     description: 'Slack webhook URL'
     required: true
+
+  stage:
+    description: 'Release stage'
+    required: false
   
   text:
     description: 'Additional description for the release'

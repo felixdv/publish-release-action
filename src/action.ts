@@ -6,19 +6,22 @@ import { getPostData } from './getPostData';
 
 async function run(): Promise<void> {
     try {
-        const slackWebhookUrl = core.getInput('url');
+        const slackWebhookUrl = core.getInput('slackWebhookUrl');
         console.log(`Webhook URL: ${slackWebhookUrl}`);
 
         // If input is not provided, text will be an empty string
         const text = core.getInput('text');
         console.log(`Text: ${text}`);
 
-        const repository = github.context.repo.repo;
+        const stage = core.getInput('stage') ?? process.env.STAGE ?? 'undefined';
 
         // Test to see what environment we have here
         core.setOutput('environment', process.env);
 
-        const postData = getPostData(text, repository);
+        const postData = getPostData(github.context, {
+            text,
+            stage,
+        });
         core.setOutput('request', JSON.stringify(postData));
 
         const httpClient = new httpm.HttpClient('slack webhook client');
