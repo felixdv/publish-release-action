@@ -9728,7 +9728,10 @@ async function run() {
         const postData = getPostData(text, repository);
         core.setOutput('request', JSON.stringify(postData));
         const httpClient = new lib.HttpClient('slack webhook client');
-        const response = await httpClient.postJson(slackWebhookUrl, postData);
+        const requestHeaders = {
+            [lib.Headers.ContentType]: 'application/json',
+        };
+        const response = await httpClient.postJson(slackWebhookUrl, postData, requestHeaders);
         core.setOutput('response', JSON.stringify({
             statusCode: response.statusCode,
             result: response.result,

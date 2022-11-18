@@ -19,7 +19,10 @@ async function run(): Promise<void> {
         core.setOutput('request', JSON.stringify(postData));
 
         const httpClient = new httpm.HttpClient('slack webhook client');
-        const response = await httpClient.postJson(slackWebhookUrl, postData);
+        const requestHeaders = {
+            [httpm.Headers.ContentType]: 'application/json',
+        };
+        const response = await httpClient.postJson(slackWebhookUrl, postData, requestHeaders);
 
         core.setOutput(
             'response',
