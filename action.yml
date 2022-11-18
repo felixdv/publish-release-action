@@ -1,0 +1,21 @@
+name: 'Publish Release'
+description: 'Publish information about the release to a Slack channel'
+
+inputs:
+  url:
+    description: 'Slack webhook URL'
+    required: true
+  
+  text:
+    description: 'Additional description for the release'
+    required: false
+
+outputs:
+  request:
+    description: JSON request payload that was posted to Slack
+  response:
+    description: Content included in Slack's reponse
+
+runs:
+  using: 'node16'
+  main: 'src/index.js'
