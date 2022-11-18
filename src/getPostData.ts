@@ -8,6 +8,7 @@ type InputOpts = {
 export function getPostData(context: Context, input: InputOpts): any {
     const repository = `${context.repo.owner}/${context.repo.repo}`;
     const repositoryLink = `<${context.serverUrl}/${repository}|${repository}>`;
+    const commitLink = `${context.serverUrl}/${repository}/commit/${context.sha}`;
     const title = `Release for ${repositoryLink} [${input.stage}]: ${input.text}`;
     return {
         attachments: [
@@ -28,7 +29,7 @@ export function getPostData(context: Context, input: InputOpts): any {
                     },
                     {
                         title: 'SHA',
-                        value: context.sha,
+                        value: `<${commitLink}|${context.sha.substr(0, 8)}>`,
                         short: false,
                     },
                 ],

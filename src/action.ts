@@ -13,7 +13,7 @@ async function run(): Promise<void> {
         const text = core.getInput('text');
         console.log(`Text: ${text}`);
 
-        const stage = core.getInput('stage') ?? process.env.STAGE ?? 'undefined';
+        const stage = core.getInput('stage');
 
         // Test to see what environment we have here
         core.setOutput('environment', process.env);

@@ -38,7 +38,7 @@ describe('getPostData tests', () => {
                         },
                         {
                             title: 'SHA',
-                            value: 'c97be9ffd5dbdd1c4e59e4e2945a3701475af543',
+                            value: '<https://github.com/johndoe/foo-bar-api/commit/c97be9ffd5dbdd1c4e59e4e2945a3701475af543|c97be9ff>',
                             short: false,
                         },
                     ],

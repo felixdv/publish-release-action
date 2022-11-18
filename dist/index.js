@@ -9709,6 +9709,7 @@ var lib = __nccwpck_require__(6255);
 function getPostData(context, input) {
     const repository = `${context.repo.owner}/${context.repo.repo}`;
     const repositoryLink = `<${context.serverUrl}/${repository}|${repository}>`;
+    const commitLink = `${context.serverUrl}/${repository}/commit/${context.sha}`;
     const title = `Release for ${repositoryLink} [${input.stage}]: ${input.text}`;
     return {
         attachments: [
@@ -9729,7 +9730,7 @@ function getPostData(context, input) {
                     },
                     {
                         title: 'SHA',
-                        value: context.sha,
+                        value: `<${commitLink}|${context.sha.substr(0, 8)}>`,
                         short: false,
                     },
                 ],
@@ -9744,14 +9745,13 @@ function getPostData(context, input) {
 
 
 async function run() {
-    var _a, _b;
     try {
         const slackWebhookUrl = core.getInput('slackWebhookUrl');
         console.log(`Webhook URL: ${slackWebhookUrl}`);
         // If input is not provided, text will be an empty string
         const text = core.getInput('text');
         console.log(`Text: ${text}`);
-        const stage = (_b = (_a = core.getInput('stage')) !== null && _a !== void 0 ? _a : process.env.STAGE) !== null && _b !== void 0 ? _b : 'undefined';
+        const stage = core.getInput('stage');
         // Test to see what environment we have here
         core.setOutput('environment', process.env);
         const postData = getPostData(github.context, {

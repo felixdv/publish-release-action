@@ -9,6 +9,7 @@ inputs:
   stage:
     description: 'Release stage'
     required: false
+    default: 'undefined'
   
   text:
     description: 'Additional description for the release'
